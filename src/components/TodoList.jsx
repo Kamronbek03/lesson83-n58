@@ -11,10 +11,12 @@ const TodoList = () => {
     setNewTitle(title);
   };
 
-  const handleUpdate = (id) => {
-    editTodo(id, newTitle);
-    setEditId(null);
-    setNewTitle("");
+  const handleUpdate = () => {
+    if (newTitle.trim()) {
+      editTodo(editId, newTitle);
+      setEditId(null);
+      setNewTitle("");
+    }
   };
 
   return (
@@ -28,7 +30,7 @@ const TodoList = () => {
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
               />
-              <button onClick={() => handleUpdate(todo.id)}>Save</button>
+              <button onClick={handleUpdate}>Save</button>
             </>
           ) : (
             <>

@@ -43,20 +43,20 @@ const useTodoStore = create((set) => ({
     }));
   },
   editTodo: async (id, title) => {
-    const updatedTodo = {
-      ...state.todos.find((todo) => todo.id === id),
-      title,
-    };
+    // Updating the state first to ensure immediate UI feedback
+    set((state) => ({
+      todos: state.todos.map((todo) =>
+        todo.id === id ? { ...todo, title } : todo
+      ),
+    }));
+    // Syncing the change with the backend
     await fetch(`http://localhost:3000/todos/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updatedTodo),
+      body: JSON.stringify({ id, title }),
     });
-    set((state) => ({
-      todos: state.todos.map((todo) => (todo.id === id ? updatedTodo : todo)),
-    }));
   },
 }));
 
